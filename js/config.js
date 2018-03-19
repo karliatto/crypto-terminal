@@ -5,7 +5,7 @@ app.config = (function() {
 	'use strict';
 
 	var config = {
-		debug: false,
+		debug: true,
 		supportEmail: 'cryptoterminal.eu@gmail.com',
 		cache: {
 			onAppStartClearOlderThan: 86400000,// milliseconds
@@ -91,6 +91,11 @@ app.config = (function() {
 		paymentHistory: {
 			list: {
 				limit: 30,
+			},
+			export: {
+				storagePath: 'file:///storage/emulated/0/',
+				storageDirectory: 'download',
+				fileName: 'payment-history.csv',
 			}
 		},
 		settings: [
