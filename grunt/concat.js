@@ -97,6 +97,7 @@ module.exports = {
 			'js/cache.js',
 			'js/settings.js',
 			'js/sound.js',
+			'js/export-payments.js',
 			'js/i18n.js',
 			'js/router.js',
 			'js/init.js'

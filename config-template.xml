@@ -24,6 +24,5 @@
     </plugin>
     <plugin name="cordova-plugin-inappbrowser" spec="2.0.2" />
     <plugin name="cordova-plugin-network-information" spec="2.0.1" />
-    <preference name="iosExtraFilesystems" value="library,library-nosync,documents,documents-nosync,cache,bundle,root" />
     <preference name="AndroidExtraFilesystems" value="files,files-external,documents,sdcard,cache,cache-external,assets,root" />
 </widget>

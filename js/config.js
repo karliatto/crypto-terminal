@@ -96,7 +96,8 @@ app.config = (function() {
 			export: {
 				storagePath: 'file:///storage/emulated/0/',
 				storageDirectory: 'download',
-				fileName: 'payment-history.csv',
+				fileName: 'payment-history',
+				extension: '.csv'
 			}
 		},
 		settings: [
