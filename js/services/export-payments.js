@@ -17,6 +17,7 @@ app.services.exportPayments = (function() {
 	];
 
 	function paymentToCsv(paymentRequest) {
+		console.log('paymentRequest', paymentRequest);
 		return [
 			paymentRequest.status,
 			paymentRequest.amount,
@@ -34,24 +35,31 @@ app.services.exportPayments = (function() {
 				fileWriter.onwriteend = function () {
 					cb(null, { fileName: fileEntry.name });
 				};
-				fileWriter.onerror = function (e) {
-					cb(e, null);
+				fileWriter.onerror = function (error) {
+					cb(error);
 				};
 				fileWriter.write(blob);
 			});
-		}, function (e) {
-			cb(e, null);
+		}, function (error) {
+			cb(error);
 		});
 	}
 
-	function getFullPaymentsHistory() {
+	function getFullPaymentsHistory(cb) {
 		// TODO: create a way to fetch all payments request
+		var total = app.paymentRequests.total;
+
+		var options = {
+			limit: total
+		}
+		app.paymentRequests.sqliteStore.findAll(options, cb)
 	}
 
 	return {
 
 		convertToCsv: function(paymentRequests) {
 
+			console.log('paymentRequests in convertToCsv', paymentRequests);
 			var csv = _.reduce(paymentRequests || [], function (memo, paymentRequest) {
 				return memo + '\n' + paymentToCsv(paymentRequest).join(',');
 			}, csvHeaders.join(','));
@@ -76,6 +84,8 @@ app.services.exportPayments = (function() {
 		 */
 		writePaymentsAsCsvFileInCordova: function(history, fileName, cb) {
 
+			console.log('writePaymentsAsCsvFileInCordova');
+			console.log('history', history);
 			var blob = this.writePaymentsAsCsvBlob(history);
 			var storagePath = app.config.paymentHistory.export.storagePath;
 			var storageDirectory = app.config.paymentHistory.export.storageDirectory;
@@ -109,11 +119,11 @@ app.services.exportPayments = (function() {
 			_.defer(cb)
 		},
 
-		exportPaymentDetails: function(history, fileName) {
+		exportPaymentDetails: function() {
 
 			var fileName = app.config.paymentHistory.export.fileName;
 
-			var history = _.filter(_.map(this.collection.models, function (model) {
+			var history = _.filter(_.map(app.paymentRequests.models, function (model) {
 				return model.attributes;
 			}));
 
@@ -129,7 +139,10 @@ app.services.exportPayments = (function() {
 			if (!app.isCordova()) {
 				this.writePaymentsAsCsvFileInBrowser(history, fileName, done);
 			} else {
-				this.writePaymentsAsCsvFileInCordova(history, fileName, done);
+				getFullPaymentsHistory(_.bind(function(error, history) {
+					if (error) return console.log('error', error);
+					this.writePaymentsAsCsvFileInCordova(history, fileName, done);
+				}));
 			}
 		}
 	}

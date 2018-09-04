@@ -5,7 +5,7 @@ app.config = (function() {
 	'use strict';
 
 	var config = {
-		debug: true,
+		debug: false,
 		supportEmail: 'cryptoterminal.eu@gmail.com',
 		cache: {
 			onAppStartClearOlderThan: 86400000,// milliseconds

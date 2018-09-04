@@ -486,7 +486,7 @@ app.views.Main = (function() {
 		},
 
 		exportPaymentHistory: function() {
-			
+			app.services.exportPayments.exportPaymentDetails();
 		}
 
 	});
